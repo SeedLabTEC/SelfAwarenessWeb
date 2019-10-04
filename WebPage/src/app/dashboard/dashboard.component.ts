@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import Chart from 'chart.js';
-import {memory,cpu,power} from '../models/datasets'
+import {memory,cpu, power, top} from '../models/datasets'
 import { getLocaleTimeFormat } from '@angular/common';
 import { interval, Subscription } from 'rxjs';
 import swal from 'sweetalert2'
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { FileService } from '../services/file.service';
+import { constants } from '../config/constants';
 declare const $: any;
 
 @Component({
@@ -16,14 +18,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public powerData:Array<power>;
   public cpuData:Array<cpu>;
   public memoryData:Array<memory>;
+  public topData:Array<top>;
   subscription: Subscription;
   counter:number;
   autoRefresh:Boolean;
   fileData: File = null;
-  constructor( private fileService : FileService){
+  constructor( private fileService : FileService, private http: HttpClient){
 
   }
   public ngOnInit(){
+    this.topData= new Array<top>();
+    this.getTop();
     this.powerData = new Array<power>();
     this.memoryData = new Array<memory>();
     this.cpuData = new Array<cpu>();
@@ -31,6 +36,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.autoRefresh = false;
     this.subscribe();    
     this.fileData = new File(null,null);
+    //this.getTop();
   }
 
 
@@ -66,6 +72,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     mem.memoryValue = 5.1;
     this.memoryData[this.counter] = mem;
     this.counter= this.counter+1;
+  }
+
+  public getTop(){
+    //this.fileService.getTop()
+    const url =`${constants.apiURL}/top`;
+    this.http
+    .get(url)
+    .subscribe(data=>{
+      console.log(data)
+      this.topData=data.result;
+    });
   }
 
   public run(){
