@@ -30,8 +30,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.counter = 0;
     this.autoRefresh = false;
     this.subscribe();    
-   
-    
+    this.fileData = new File(null,null);
   }
 
 
