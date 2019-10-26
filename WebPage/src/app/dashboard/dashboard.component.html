@@ -7,10 +7,10 @@
             </div>
             <div class="card-body ">
               <form method="#" action="#">
-                <label>Project Name</label>
+                <label>App PID</label>
                 <div class="form-group">
-                  <input type="text" class="form-control" placeholder="Enter name">
-                  <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Enter pid">
+                  <!--<div class="input-group">
                       <div class="custom-file">
                           <label for="file">Choose File</label>
                           <input type="file"
@@ -18,13 +18,12 @@
                                  (change)="handleFileInput($event.target.files)" >
                         <label class="custom-file-label" for="inputGroupFile01">{{fileData.name}}</label>
                       </div>
-                  </div>
+                  </div>-->
                 </div>
               </form>
             </div>
             <div class="card-footer ">
-              <button (click)="uploadFile()" class="btn btn-info btn-round col-md-3">Choose App</button>
-              <button (click)="runApp()" type="submit" class="btn btn-danger btn-round col-md-3" style="float: right">Run App</button>
+              <button (click)="runApp()" type="submit" class="btn btn-danger btn-round col-md-3" style="float: right">Monitor App</button>
             </div>
           </div>
         </div>
@@ -80,8 +79,9 @@
               </th>
             </thead>
             <tbody *ngFor="let data of topData">
+            <!--<tbody>-->
               <tr>
-                <td>{{data.pid}}</td>
+                <td data-target="#myModal" (click)="test(data.pid)">{{data.pid}}</td>
                 <td>{{data.user}}</td>
                 <td>{{data.pr}}</td>
                 <td>{{data.ni}}</td>
@@ -284,4 +284,3 @@
       </div>
     </div>
   </div>
-  

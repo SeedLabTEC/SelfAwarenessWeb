@@ -3,7 +3,7 @@ import Chart from 'chart.js';
 import {memory,cpu, power, top} from '../models/datasets'
 import { getLocaleTimeFormat } from '@angular/common';
 import { interval, Subscription } from 'rxjs';
-import swal from 'sweetalert2'
+import swal from 'sweetalert2';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { FileService } from '../services/file.service';
 import { constants } from '../config/constants';
@@ -23,6 +23,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   counter:number;
   autoRefresh:Boolean;
   fileData: File = null;
+  ef:string;
   constructor( private fileService : FileService, private http: HttpClient){
 
   }
@@ -35,7 +36,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.counter = 0;
     this.autoRefresh = false;
     this.subscribe();    
-    this.fileData = new File(null,null);
+    //this.fileData = new File(null,null);
+    this.ef="hola mundo";
     //this.getTop();
   }
 
@@ -54,15 +56,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     handleFileInput(files: FileList) {
-      this.fileData = files.item(0);
+      //this.fileData = files.item(0);
   }
 
   uploadFile(){
-    this.fileService.uploadDoc(this.fileData,()=>{});
+    //this.fileService.uploadDoc(this.fileData,()=>{});
   }
 
   runApp(){
-    this.fileService.runApp(this.fileData.name,()=>{})
+    //this.fileService.runApp(this.fileData.name,()=>{})
   }
 
   public addData(){
@@ -80,13 +82,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.http
     .get(url)
     .subscribe(data=>{
-      console.log(data)
-      this.topData=data.result;
+     this.topData=data['result'];
     });
   }
 
   public run(){
     
+  }
+
+  public test(text){
+    swal.fire('Do you want to monitor the app '+text+'?');
   }
 
     

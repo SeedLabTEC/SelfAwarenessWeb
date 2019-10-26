@@ -17,7 +17,6 @@ export class memory {
     date: Date;
     powerValue: Number;
   }
-
   export class top {
     command: string;
     cpu: string;
