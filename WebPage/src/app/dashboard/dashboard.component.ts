@@ -37,7 +37,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.autoRefresh = false;
     this.subscribe();    
     //this.fileData = new File(null,null);
-    this.ef="hola mundo";
     //this.getTop();
   }
 
