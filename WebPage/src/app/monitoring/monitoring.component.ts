@@ -4,6 +4,7 @@ import { interval, Subscription } from 'rxjs';
 import { constants } from '../config/constants';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
+declare var require: any
 
 @Component({
   selector: 'app-monitoring',
@@ -40,11 +41,21 @@ export class MonitoringComponent implements OnInit   {
   public generalArr:any;
   public xAxys:any;
   public pid:any;
+  public name:any;
+  public sliderRegular :any;
+  public sliderRegular1 :any;
+  public sliderRegular2 :any;
+  
 
   constructor(private http: HttpClient, private router:Router){
 
   }
+
+  public ngOnDestroy(){
+    this.subscription.unsubscribe();
+  }
   public ngOnInit(){
+    // var require: any
     this.cpu=0;
     this.mem=0;
     this.power=0;
@@ -57,7 +68,8 @@ export class MonitoringComponent implements OnInit   {
     const source = interval(1000);
     this.cont=0;
     this.pid=history.state['pid'];
-   // this.urlapi = 'http://192.168.1.15:8080';
+    this.name=history.state['name'];
+  console.log(this.name);
    this.arr=[3,4 ,5 ,6 , 5];
    this.arr1=[2, 1, 3.5, 7, 3];
     this.subscription = source.subscribe(val => this.getLastData());
@@ -159,11 +171,44 @@ export class MonitoringComponent implements OnInit   {
           }
         }
       });
-      console.log(`DATA: ${history.state['pid']}`);
+      console.log(`DATA: ${this.pid}`);
+      var noUiSlider = require('nouislider');
+
+      this.sliderRegular = document.getElementById('sliderRegular');
+      this.sliderRegular1 = document.getElementById('sliderRegular1');
+      this.sliderRegular2 = document.getElementById('sliderRegular2');
+
+      noUiSlider.create(this.sliderRegular, {
+            start: 40,
+            connect: [true,false],
+            range: {
+                min: 0,
+                max: 100
+            }
+      });
+
+      noUiSlider.create(this.sliderRegular1, {
+        start: 40,
+        connect: [true,false],
+        range: {
+            min: 0,
+            max: 100
+        }
+      });
+
+      noUiSlider.create(this.sliderRegular2, {
+        start: 40,
+        connect: [true,false],
+        range: {
+          min: 0,
+          max: 100
+        }
+      });
   }
 
   private getLastData(){
     //this.fileService.getTop()
+    if(this.pid!==undefined){
     const url =`${constants.apiURL}/getPidData/${this.pid}`;
     this.http
     .get(url)
@@ -178,40 +223,29 @@ export class MonitoringComponent implements OnInit   {
       this.cpuArr.shift();
       this.powerArr.shift();
       this.xAxys.shift();
-      this.myChart.update(this,this.memArr);
-      this.myChart.update(this,this.memPerArr);
-      this.myChart1.update(this,this.cpuArr);
-      this.myChart2.update(this,this.powerArr);
+      this.myChart.update(this.memArr);
+      this.myChart.update(this.memPerArr);
+      this.myChart1.update(this.cpuArr);
+      this.myChart2.update(this.powerArr);
       this.generalArr.push(data);
       this.mem=data['memBytes']/1000;
       this.cpu=data['cpuPercen'];
       this.power=data['powerPercen'];
-      console.log(data);
+      //console.log(data);
     });
   }
+  }
 
- /* private getDoors(){
-    if(this.cont<10){
-      this.arr.push(7+this.cont);
-      this.cont++;
-      this.arr1.push(1);
-      this.cont1+=2;
-    }else if(this.cont>15){
-      this.cont--;
-      this.cont1--;
-    }else{
-      this.arr.push(this.cont-1);
-      this.arr1.push(1);
-      this.cont--;
-      this.cont1--;
+  private getValues(){
+    var data={
+      pid:this.pid,
+      mem:this.sliderRegular.noUiSlider.get(),
+      cpu:this.sliderRegular1.noUiSlider.get(),
+      power:this.sliderRegular2.noUiSlider.get()
     }
-    console.log(this.arr);
-   // this.arr.push(7);
-    this.arr.shift();
-    this.arr1.shift();
-   // this.myChart.data.datasets=this.arr1;
-    this.myChart.update(this.arr);
-     this.myChart.update(this.arr1);
-  }*/
+    console.log(data);
+  }
     
 }
+
+

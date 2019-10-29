@@ -93,6 +93,7 @@ export class ExtendedFormsComponent implements OnInit{
         }
 
         var noUiSlider = require('nouislider');
+        
         var sliderRegular = document.getElementById('sliderRegular');
 
         noUiSlider.create(sliderRegular, {
