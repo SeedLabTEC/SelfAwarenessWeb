@@ -40,6 +40,10 @@ export const AppRoutes: Routes = [{
         },{
             path: '',
             loadChildren: './widgets/widgets.module#WidgetsModule'
+        },
+        {
+            path: '',
+            loadChildren: './monitoring/monitoring.module#MonitoringModule'
         }]
         },{
             path: '',

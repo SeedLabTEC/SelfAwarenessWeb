@@ -81,7 +81,7 @@
             <tbody *ngFor="let data of topData">
             <!--<tbody>-->
               <tr>
-                <td data-target="#myModal" (click)="test(data.pid)">{{data.pid}}</td>
+                <td data-target="#myModal" (click)="monitor(data.pid, data.name)">{{data.pid}}</td>
                 <td>{{data.user}}</td>
                 <td>{{data.pr}}</td>
                 <td>{{data.ni}}</td>

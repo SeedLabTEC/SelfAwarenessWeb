@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import Chart from 'chart.js';
 import {memory,cpu, power, top} from '../models/datasets'
+import { Router, ActivatedRoute } from '@angular/router';
 import { getLocaleTimeFormat } from '@angular/common';
 import { interval, Subscription } from 'rxjs';
 import swal from 'sweetalert2';
@@ -24,16 +25,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   autoRefresh:Boolean;
   fileData: File = null;
   ef:string;
-  constructor( private fileService : FileService, private http: HttpClient){
+  constructor( private fileService : FileService, private http: HttpClient, private router:Router){
 
   }
   public ngOnInit(){
-    this.topData= new Array<top>();
-    this.getTop();
-    this.powerData = new Array<power>();
-    this.memoryData = new Array<memory>();
-    this.cpuData = new Array<cpu>();
-    this.counter = 0;
+    
     this.autoRefresh = false;
     this.subscribe();    
     //this.fileData = new File(null,null);
@@ -89,8 +85,35 @@ export class DashboardComponent implements OnInit, OnDestroy {
     
   }
 
-  public test(text){
-    swal.fire('Do you want to monitor the app '+text+'?');
+  public monitor(pid, name){
+    swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to monitor the app '+pid+ ' - '+ name+'?',
+      type: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes'
+    }).then((result) => {
+      if (result.value) {
+        const url =`${constants.apiURL}/monitorApp/${pid}`;
+    this.http
+    .post(url, {
+      })
+      .subscribe(
+      data  => {
+      console.log("POST Request is successful ", data);
+      },
+      error  => {
+      
+      console.log("Error", error);
+      
+      }
+      
+      );
+        this.router.navigateByUrl('/monitoring', { state: { pid:pid , name:name} });
+      }
+    })
   }
 
     
