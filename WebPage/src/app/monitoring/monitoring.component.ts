@@ -4,7 +4,13 @@ import { interval, Subscription } from 'rxjs';
 import { constants } from '../config/constants';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
+import swal from 'sweetalert2';
 declare var require: any
+var range_all_sliders = {
+	'min': [     0 ],
+	'50%': [   50,  50 ],
+	'max': [ 100 ]
+};
 
 @Component({
   selector: 'app-monitoring',
@@ -15,6 +21,7 @@ export class MonitoringComponent implements OnInit   {
   public myChart: any;
   public myChart1: any;
   public myChart2: any;
+  public myChart3: any;
   public gradientStroke;
   public chartColor = "#FFFFFF";
   public canvas : any;
@@ -26,6 +33,8 @@ export class MonitoringComponent implements OnInit   {
   public ctx1;
   public canvas2 : any;
   public ctx2;
+  public canvas3 : any;
+  public ctx3;
   public gradientFill;
   public gradientChartOptionsConfiguration: any;
   public gradientChartOpt
@@ -42,9 +51,20 @@ export class MonitoringComponent implements OnInit   {
   public xAxys:any;
   public pid:any;
   public name:any;
-  public sliderRegular :any;
-  public sliderRegular1 :any;
-  public sliderRegular2 :any;
+  public sliderDouble :any;
+  public sliderDouble1 :any;
+  public sliderDouble2 :any;
+  public flag:any;
+  public sliderSingle :any;
+  public sliderSingle1 :any;
+  public sliderSingle2 :any;
+  private httpOptions = {
+    headers: new HttpHeaders({
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+    })
+};
+
   
 
   constructor(private http: HttpClient, private router:Router){
@@ -55,25 +75,27 @@ export class MonitoringComponent implements OnInit   {
     this.subscription.unsubscribe();
   }
   public ngOnInit(){
+    
     // var require: any
     this.cpu=0;
     this.mem=0;
     this.power=0;
     this.generalArr=[];
-    this.memArr=[,,,,,,,,,];
-    this.memPerArr=[,,,,,,,,,];
-    this.cpuArr=[,,,,,,,,,];
-    this.powerArr=[,,,,,,,,,];
-    this.xAxys=[,,,,,,,,,];
-    const source = interval(1000);
+    this.flag=true;
+    this.memArr=[];
+    this.memPerArr=[];
+    this.cpuArr=[];
+    this.powerArr=[];
+    this.xAxys=[];
+    const source = interval(600);
     this.cont=0;
     this.pid=history.state['pid'];
     this.name=history.state['name'];
-  console.log(this.name);
+  //console.log(this.name);
    this.arr=[3,4 ,5 ,6 , 5];
    this.arr1=[2, 1, 3.5, 7, 3];
     this.subscription = source.subscribe(val => this.getLastData());
-    console.log("MONITORING");
+  //  console.log("MONITORING");
     this.canvas = document.getElementById("chartStock");
       this.ctx = this.canvas.getContext("2d");
 
@@ -98,16 +120,6 @@ export class MonitoringComponent implements OnInit   {
             fill: false,
             borderWidth: 3,
             data:  this.memArr
-          },
-          {
-            label: "Memory %",
-            borderColor: "#E6D10D",
-            pointBackgroundColor: "#E6D10D",
-            pointRadius: 3,
-            pointHoverRadius: 3,
-            fill: false,
-            borderWidth: 3,
-            data:this.memPerArr
           }]
         },
         options: {
@@ -171,79 +183,173 @@ export class MonitoringComponent implements OnInit   {
           }
         }
       });
+
+      this.canvas3 = document.getElementById("chartStock3");
+      this.ctx3 = this.canvas3.getContext("2d");
+      this.myChart3 = new Chart(this.ctx3, {
+        type: 'line',
+        data: {
+          labels: this.xAxys,
+          datasets: [{
+            label: "Active Users",
+            borderColor: "#f17e5d",
+            pointBackgroundColor: "#f17e5d",
+            pointRadius: 3,
+            pointHoverRadius: 3,
+            fill: false,
+            borderWidth: 3,
+            data:  this.memPerArr
+          }]
+        },
+        options: {
+
+          legend: {
+
+            display: false
+          }
+        }
+      });
       console.log(`DATA: ${this.pid}`);
       var noUiSlider = require('nouislider');
 
-      this.sliderRegular = document.getElementById('sliderRegular');
-      this.sliderRegular1 = document.getElementById('sliderRegular1');
-      this.sliderRegular2 = document.getElementById('sliderRegular2');
+      this.sliderDouble = document.getElementById('sliderDouble');
+      this.sliderDouble1 = document.getElementById('sliderDouble1');
+      this.sliderDouble2 = document.getElementById('sliderDouble2');
 
-      noUiSlider.create(this.sliderRegular, {
-            start: 40,
-            connect: [true,false],
-            range: {
-                min: 0,
-                max: 100
-            }
-      });
+      this.sliderSingle = document.getElementById('sliderSingle');
+      this.sliderSingle1 = document.getElementById('sliderSingle1');
+      this.sliderSingle2 = document.getElementById('sliderSingle2');
 
-      noUiSlider.create(this.sliderRegular1, {
-        start: 40,
-        connect: [true,false],
-        range: {
-            min: 0,
-            max: 100
-        }
-      });
-
-      noUiSlider.create(this.sliderRegular2, {
-        start: 40,
+      noUiSlider.create(this.sliderSingle, {
+        start: 0,
         connect: [true,false],
         range: {
           min: 0,
           max: 100
-        }
+      },
+    });
+
+    noUiSlider.create(this.sliderSingle1, {
+      start: 0,
+      connect: [true,false],
+      range: {
+        min: 0,
+        max: 100
+    }
+  });
+
+  noUiSlider.create(this.sliderSingle2, {
+    start: 0,
+    connect: [true,false],
+    range: {
+      min: 0,
+      max: 100
+  },
+});
+
+      noUiSlider.create(this.sliderDouble, {
+            start: [20,60],
+            connect: true,
+            range: {
+                min: 0,
+                max: 100
+            },
+            tooltips: true
+      });
+
+      noUiSlider.create(this.sliderDouble1, {
+        start: [20,60],
+        connect: true,
+        range: {
+            min: 0,
+            max: 100
+        },
+        tooltips: true
+      });
+
+      noUiSlider.create(this.sliderDouble2, {
+        start: [20,60],
+        connect: true,
+        range: {
+          min: 0,
+          max: 100
+        },
+        tooltips: true
+
       });
   }
 
   private getLastData(){
     //this.fileService.getTop()
+    if(this.flag){
     if(this.pid!==undefined){
     const url =`${constants.apiURL}/getPidData/${this.pid}`;
     this.http
     .get(url)
     .subscribe(data=>{
+      if(data['flag']==1){
       this.memArr.push(data['memBytes']);
       this.memPerArr.push(data['memPercen']);
       this.cpuArr.push(data['cpuPercen']);
       this.powerArr.push(data['powerPercen']);
       this.xAxys.push(data['timestamp']);
-      this.memArr.shift();
+     /* this.memArr.shift();
       this.memPerArr.shift();
       this.cpuArr.shift();
       this.powerArr.shift();
-      this.xAxys.shift();
+      this.xAxys.shift();*/
       this.myChart.update(this.memArr);
-      this.myChart.update(this.memPerArr);
+      this.myChart3.update(this.memPerArr);
       this.myChart1.update(this.cpuArr);
       this.myChart2.update(this.powerArr);
       this.generalArr.push(data);
       this.mem=data['memBytes']/1000;
       this.cpu=data['cpuPercen'];
       this.power=data['powerPercen'];
+      }else{
+        this.flag=false;
+      }
       //console.log(data);
-    });
+    });}
   }
   }
 
   private getValues(){
     var data={
       pid:this.pid,
-      mem:this.sliderRegular.noUiSlider.get(),
-      cpu:this.sliderRegular1.noUiSlider.get(),
-      power:this.sliderRegular2.noUiSlider.get()
+      mem:this.sliderDouble.noUiSlider.get(),
+      cpu:this.sliderDouble1.noUiSlider.get(),
+      power:this.sliderDouble2.noUiSlider.get()
     }
     console.log(data);
+  }
+
+  private setParameters(){
+    var data={
+      pid:this.pid,
+      mem:this.sliderDouble.noUiSlider.get(),
+      cpu:this.sliderDouble1.noUiSlider.get(),
+      power:this.sliderDouble2.noUiSlider.get()
+    }
+    this.http
+            .post<any>(`${constants.apiURL}/configureAnalisys/${this.pid}`, data, this.httpOptions)
+            .subscribe(data => {
+              swal.fire({
+                title: 'Complete',
+                text: 'Completed',
+                type: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Ok'
+              })
+        }, error => {
+          swal.fire({
+            title: 'Error',
+            text: 'Error sending self awareness parameters.',
+            type: 'error',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Ok'
+          })
+        });
   }
     
 }

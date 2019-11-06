@@ -2,7 +2,7 @@
         <h2>APP {{pid}}</h2>
 
     <div class="row">
-      <div class="col-md-12">
+      <div class="col">
         <div class="card ">
           <div class="card-header text-center">
             <h4 class="card-title">Self Awareness Configuration</h4>
@@ -11,23 +11,55 @@
             <div class="row">
               <div class="col">
                 <h6>Memory</h6>
-                <div id="sliderRegular" class="slider slider-success"></div>
+                <div id="sliderDouble" class="slider slider-success"></div>
                 <br>
                 <h6>CPU</h6>
-                <div id="sliderRegular1" class="slider slider-warning"></div>
+                <div id="sliderDouble1" class="slider slider-warning"></div>
                 <br>
                 <h6>Power</h6>
-                <div id="sliderRegular2" class="slider slider-danger"></div>
+                <div id="sliderDouble2" class="slider slider-danger"></div>
                 <br>
               </div>
               </div>
             </div>
             <div class="card-footer ">
-              <button (click)="getValues()" type="submit" class="btn btn-success btn-round col-md-3" style="float: right">Apply Self Awareness</button>
+              <!--<button (click)="setParameters()" type="submit" class="btn btn-success btn-round col-md-3" style="float: right">Apply Self Awareness</button>-->
             </div>
           </div>
         </div>
+        <div class="col">
+          <div class="card ">
+            <div class="card-header text-center">
+              <h4 class="card-title">Self Awareness Priority</h4>
+            </div>
+            <div class="card-body" >
+              <div class="row">
+                <div class="col">
+                  <h6>Memory</h6>
+                  <div id="sliderSingle" class="slider slider-success"></div>
+                  <br>
+                  <h6>CPU</h6>
+                  <div id="sliderSingle1" class="slider slider-warning"></div>
+                  <br>
+                  <h6>Power</h6>
+                  <div id="sliderSingle2" class="slider slider-danger"></div>
+                  <br>
+                </div>
+                </div>
+              </div>
+              <div class="card-footer ">
+                <!--<button (click)="getValues()" type="submit" class="btn btn-success btn-round col-md-3" style="float: right">Apply Self Awareness</button>-->
+              </div>
+            </div>
+          </div>
       </div>
+      <div class="row" >
+        <button (click)="setParameters()" type="submit" class="btn btn-success btn-round col-md-3" style="width:800px; margin:0 auto;">Apply Self Awareness</button>
+      </div>
+      <br>
+      <br>
+      <br>
+      
     <div class="row">
       <div class="col">
         <div class="card card-stats">
@@ -87,7 +119,7 @@
               <div class="col-7 col-md-8">
                 <div class="numbers">
                   <p class="card-category">Power</p>
-                  <p class="card-title">{{power}} mW
+                  <p class="card-title">{{power}} %
                   </p>
                 </div>
               </div>
@@ -172,6 +204,23 @@
                 </div>
               </div>
             </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card ">
+                  <div class="card-header text-center">
+                    <h4 class="card-title">Memory Graph</h4>
+                  </div>
+                  <div class="card-body" >
+                    <div class="row">
+                      <div class="col"> 
+                              <canvas id="chartStock3"></canvas>
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             <div class="row">
                     <div class="col-md-12">
                       <div class="card ">
