@@ -29,7 +29,7 @@ export const ROUTES: RouteInfo[] = [{
         title: 'Monitoring',
         type: 'link',
         icontype: 'nc-icon nc-single-copy-04'
-    },{
+    }/*,{
         path: '/components',
         title: 'Components',
         type: 'sub',
@@ -108,7 +108,7 @@ export const ROUTES: RouteInfo[] = [{
             {path: 'register', title: 'Register Page', ab:'RP'},
             {path: 'lock', title: 'Lock Screen Page', ab:'LSP'}
         ]
-    }
+    }*/
 ];
 
 @Component({

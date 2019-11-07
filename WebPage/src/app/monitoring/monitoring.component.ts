@@ -58,6 +58,7 @@ export class MonitoringComponent implements OnInit   {
   public sliderSingle :any;
   public sliderSingle1 :any;
   public sliderSingle2 :any;
+  public processor:any;
   private httpOptions = {
     headers: new HttpHeaders({
         'Access-Control-Allow-Origin': '*',
@@ -288,6 +289,7 @@ export class MonitoringComponent implements OnInit   {
     .get(url)
     .subscribe(data=>{
       if(data['flag']==1){
+        this.processor=data['processor'];
       this.memArr.push(data['memBytes']);
       this.memPerArr.push(data['memPercen']);
       this.cpuArr.push(data['cpuPercen']);
@@ -329,7 +331,12 @@ export class MonitoringComponent implements OnInit   {
       pid:this.pid,
       mem:this.sliderDouble.noUiSlider.get(),
       cpu:this.sliderDouble1.noUiSlider.get(),
-      power:this.sliderDouble2.noUiSlider.get()
+      power:this.sliderDouble2.noUiSlider.get(),
+      priority:{
+        mem:this.sliderSingle.noUiSlider.get(),
+        cpu:this.sliderSingle1.noUiSlider.get(),
+        power:this.sliderSingle2.noUiSlider.get()
+      }
     }
     this.http
             .post<any>(`${constants.apiURL}/configureAnalisys/${this.pid}`, data, this.httpOptions)
