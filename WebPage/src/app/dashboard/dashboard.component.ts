@@ -85,6 +85,53 @@ export class DashboardComponent implements OnInit, OnDestroy {
     
   }
 
+  public monitorApp(tdata){
+    var url='';
+    if(tdata==1){
+      //console.log("1");
+      url=`${constants.apiURL}/runDefined/1`;
+    }else if(tdata==2){
+      //console.log("2");
+      url=`${constants.apiURL}/runDefined/2`;
+    }else if(tdata==3){
+      //console.log("3");
+      url=`${constants.apiURL}/runDefined/3`;
+    }else{
+      //console.log("4");
+      url=`${constants.apiURL}/runDefined/4`;
+    }
+    var data={
+      mem:[0,20],
+      cpu:[0,20],
+      power:[0,20],
+      priority:{
+        mem:2,
+        cpu:1,
+        power:3
+      }
+    }
+    var httpOptions = {
+      headers: new HttpHeaders({
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+      })}
+    this.http
+    .post<any>(url, data,  httpOptions
+      )
+      .subscribe(
+      data  => {
+      console.log("POST Request is successful ", data);
+      this.router.navigateByUrl('/monitoring', { state: { pid:data['pid'] , name:'saxpy'} });
+      },
+      error  => {
+      
+      console.log("Error", error);
+      
+      }
+      
+      );
+  }
+
   public monitor(pid, name){
     swal.fire({
       title: 'Are you sure?',

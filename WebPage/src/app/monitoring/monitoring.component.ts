@@ -6,11 +6,6 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
 declare var require: any
-var range_all_sliders = {
-	'min': [     0 ],
-	'50%': [   50,  50 ],
-	'max': [ 100 ]
-};
 
 @Component({
   selector: 'app-monitoring',
@@ -88,7 +83,7 @@ export class MonitoringComponent implements OnInit   {
     this.cpuArr=[];
     this.powerArr=[];
     this.xAxys=[];
-    const source = interval(600);
+    const source = interval(200);
     this.cont=0;
     this.pid=history.state['pid'];
     this.name=history.state['name'];
@@ -249,7 +244,7 @@ export class MonitoringComponent implements OnInit   {
 });
 
       noUiSlider.create(this.sliderDouble, {
-            start: [20,60],
+            start: [0,25],
             connect: true,
             range: {
                 min: 0,
@@ -259,7 +254,7 @@ export class MonitoringComponent implements OnInit   {
       });
 
       noUiSlider.create(this.sliderDouble1, {
-        start: [20,60],
+        start: [0,25],
         connect: true,
         range: {
             min: 0,
@@ -269,7 +264,7 @@ export class MonitoringComponent implements OnInit   {
       });
 
       noUiSlider.create(this.sliderDouble2, {
-        start: [20,60],
+        start: [0,25],
         connect: true,
         range: {
           min: 0,
@@ -282,13 +277,14 @@ export class MonitoringComponent implements OnInit   {
 
   private getLastData(){
     //this.fileService.getTop()
+    console.log("getLastData")
     if(this.flag){
     if(this.pid!==undefined){
     const url =`${constants.apiURL}/getPidData/${this.pid}`;
     this.http
     .get(url)
     .subscribe(data=>{
-      if(data['flag']==1){
+      if(data['flag']!=0){
         this.processor=data['processor'];
       this.memArr.push(data['memBytes']);
       this.memPerArr.push(data['memPercen']);
@@ -309,6 +305,7 @@ export class MonitoringComponent implements OnInit   {
       this.cpu=data['cpuPercen'];
       this.power=data['powerPercen'];
       }else{
+        console.log("PARE!")
         this.flag=false;
       }
       //console.log(data);
